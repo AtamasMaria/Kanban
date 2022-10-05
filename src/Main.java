@@ -1,8 +1,8 @@
-import taskManager.TaskManager;
-import tasks.Epic;
-import tasks.Status;
-import tasks.Subtask;
-import tasks.Task;
+import java.yandexPracticum.taskManager.TaskManager;
+import java.yandexPracticum.task.Epic;
+import java.yandexPracticum.task.Status;
+import java.yandexPracticum.task.Subtask;
+import java.yandexPracticum.task.Task;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public class Main {
         taskManager.createEpic(new Epic("Машина", "Покупка новой машины", Status.NEW));
         taskManager.createSubtask(new Subtask("Собрать коробки", " ", Status.NEW, 3));
         taskManager.createSubtask(new Subtask("Вызвать грузчиков", " ", Status.NEW, 3));
-        taskManager.createSubtask(new Subtask("Съездить в автосалон", " ", Status.NEW,4));
+        taskManager.createSubtask(new Subtask("Съездить в автосалон", " ", Status.NEW, 4));
 
-        List <Task> tasks = taskManager.getAllTasks();
+        List<Task> tasks = taskManager.getAllTasks();
         System.out.println(tasks);
-        List <Epic> epics = taskManager.getAllEpics();
+        List<Epic> epics = taskManager.getAllEpics();
         System.out.println(epics);
-        List <Subtask> subtasks = taskManager.getAllSubtasks();
+        List<Subtask> subtasks = taskManager.getAllSubtasks();
         System.out.println(subtasks);
 
         Subtask subtasksByEpic = taskManager.getEpicSubtasksById(3);
@@ -45,6 +45,5 @@ public class Main {
         taskManager.printAllTask();
         taskManager.deleteEpicById(4);
         taskManager.printAllEpic();
-
     }
 }

@@ -1,7 +1,6 @@
-package tasks;
+package java.yandexPracticum.task;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Epic extends Task {
     private ArrayList<Integer> subtasksIdList = new ArrayList<>();

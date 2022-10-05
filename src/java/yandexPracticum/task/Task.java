@@ -1,6 +1,4 @@
-package tasks;
-
-import java.util.Objects;
+package java.yandexPracticum.task;
 
 public class Task {
     protected String name;

@@ -1,4 +1,4 @@
-package tasks;
+package java.yandexPracticum.task;
 
 public class Subtask extends Task{
     protected int epicId;

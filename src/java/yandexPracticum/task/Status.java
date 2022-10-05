@@ -1,4 +1,4 @@
-package tasks;
+package java.yandexPracticum.task;
 
 public enum Status {
     NEW,
