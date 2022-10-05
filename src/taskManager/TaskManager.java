@@ -1,6 +1,7 @@
 package taskManager;
 
 import tasks.Epic;
+import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
@@ -9,10 +10,18 @@ import java.util.HashMap;
 import java.util.List;
 
 public class TaskManager {
-    int id = 1;
-    protected HashMap<Integer, Task> taskList = new HashMap<>();
-    protected HashMap<Integer, Epic> epicList = new HashMap<>();
-    protected HashMap<Integer, Subtask> subtaskList = new HashMap<>();
+    private int id = 1;
+    private HashMap<Integer, Task> taskList = new HashMap<>();
+    private HashMap<Integer, Epic> epicList = new HashMap<>();
+    private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int createTask(Task task) {
         int id = generateId();
@@ -34,8 +43,8 @@ public class TaskManager {
         Epic epic = epicList.get(subtask.getEpicId());
         if (epic != null) {
             subtaskList.put(id, subtask);
-            epic.addSubtask(subtask);
-            epic.setEpicStatus();
+            epic.addSubtaskId(id);
+            updateEpicStatus(epic);
             return id;
         } else {
             return -1;
@@ -82,10 +91,13 @@ public class TaskManager {
         return new ArrayList<>(subtaskList.values());
     }
 
-    public List<Subtask> getEpicSubtasksById(int id) {
+    public Subtask getEpicSubtasksById(int id) {
         if (epicList.containsKey(id)) {
             Epic epic = epicList.get(id);
-            return epic.getSubtasksList();
+            for (int i = 0; i < epic.getSubtasksIdList().size(); i++) {
+               Subtask subtask = subtaskList.get(epic.getSubtasksIdList().get(i));
+               return subtask;
+            }
         }
         return null;
     }
@@ -123,9 +135,9 @@ public class TaskManager {
         Subtask subtask = subtaskList.get(id);
         if (subtask != null) {
             Epic epic = epicList.get(subtask.getEpicId());
-            epic.deleteSubtask(subtask);
+            epic.deleteSubtask(id);
             subtaskList.remove(id);
-            epic.setEpicStatus();
+            updateEpicStatus(epic);
         } else {
             System.out.println("Subtask not found.");
         }
@@ -135,6 +147,7 @@ public class TaskManager {
         subtaskList.clear();
         for (Epic epic : epicList.values()) {
             epic.deleteAllSubtask();
+            updateEpicStatus(epic);
         }
     }
 
@@ -158,7 +171,7 @@ public class TaskManager {
         if (subtaskList.containsKey(subtask.getId())) {
             subtaskList.put(subtask.getId(), subtask);
             Epic epic = epicList.get(subtask.getEpicId());
-            epic.setEpicStatus();
+            updateEpicStatus(epic);
         } else {
             System.out.println("Subtask not found.");
         }
@@ -210,6 +223,37 @@ public class TaskManager {
                         '}');
 
             }
+        }
+    }
+
+    public void updateEpicStatus(Epic epic){
+        if (epicList.containsKey(epic.getId())) {
+            if (epic.getSubtasksIdList().size() == 0) {
+               epic.setStatus(Status.NEW);
+            } else {
+                int sumStatusNew = 0;
+                int sumStatusDone = 0;
+                for (int i = 0; i < epic.getSubtasksIdList().size(); i++) {
+                    Subtask subtask = subtaskList.get(epic.getSubtasksIdList().get(i));
+                    if (subtask.getStatus() == Status.NEW) {
+                        sumStatusNew++;
+                    } else if (subtask.getStatus() == Status.DONE) {
+                        sumStatusDone++;
+                    } else {
+                        epic.setStatus(Status.IN_PROGRESS);
+                        return;
+                    }
+                }
+                if (sumStatusNew == epic.getSubtasksIdList().size()) {
+                    epic.setStatus(Status.NEW);
+                } else if (sumStatusDone == epic.getSubtasksIdList().size()) {
+                    epic.setStatus(Status.DONE);
+                } else {
+                    epic.setStatus(Status.IN_PROGRESS);
+                }
+            }
+        } else {
+            System.out.println("Epic not found.");
         }
     }
 

@@ -4,7 +4,6 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.lang.management.ManagementFactory;
 import java.util.List;
 
 public class Main {
@@ -28,7 +27,7 @@ public class Main {
         List <Subtask> subtasks = taskManager.getAllSubtasks();
         System.out.println(subtasks);
 
-        List<Subtask> subtasksByEpic = taskManager.getEpicSubtasksById(3);
+        Subtask subtasksByEpic = taskManager.getEpicSubtasksById(3);
         System.out.println(subtasksByEpic);
 
         Task task1 = taskManager.getTaskById(1);
@@ -40,7 +39,6 @@ public class Main {
         subtask.setStatus(Status.DONE);
         taskManager.updateSubtask(subtask);
         Epic epic = taskManager.getEpicByID(3);
-        epic.setEpicStatus();
         System.out.println(epic);
 
         taskManager.deleteTaskById(1);
