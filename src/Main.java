@@ -1,14 +1,13 @@
-import java.yandexPracticum.taskManager.TaskManager;
-import java.yandexPracticum.task.Epic;
-import java.yandexPracticum.task.Status;
-import java.yandexPracticum.task.Subtask;
-import java.yandexPracticum.task.Task;
-
-import java.util.List;
+import manager.Managers;
+import manager.TaskManager;
+import task.Epic;
+import task.Status;
+import task.Subtask;
+import task.Task;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
 
         System.out.println("Tests");
         taskManager.createTask(new Task("Купить пылесос.",
@@ -20,7 +19,24 @@ public class Main {
         taskManager.createSubtask(new Subtask("Вызвать грузчиков", " ", Status.NEW, 3));
         taskManager.createSubtask(new Subtask("Съездить в автосалон", " ", Status.NEW, 4));
 
-        List<Task> tasks = taskManager.getAllTasks();
+        taskManager.getTaskById(1);
+        taskManager.getEpicByID(3);
+        taskManager.getEpicByID(4);
+        taskManager.getSubtaskById(5);
+        taskManager.getSubtaskById(6);
+        taskManager.getTaskById(2);
+        taskManager.getTaskById(1);
+        taskManager.getEpicByID(4);
+        taskManager.getSubtaskById(5);
+        taskManager.getSubtaskById(6);
+        System.out.println(taskManager.getHistory());
+        taskManager.getSubtaskById(6);
+        taskManager.getEpicByID(3);
+        System.out.println(taskManager.getHistory());
+
+
+
+   /*     List<Task> tasks = taskManager.getAllTasks();
         System.out.println(tasks);
         List<Epic> epics = taskManager.getAllEpics();
         System.out.println(epics);
@@ -44,6 +60,7 @@ public class Main {
         taskManager.deleteTaskById(1);
         taskManager.printAllTask();
         taskManager.deleteEpicById(4);
-        taskManager.printAllEpic();
+        taskManager.printAllEpic(); */
+
     }
 }

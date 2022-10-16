@@ -1,4 +1,4 @@
-package java.yandexPracticum.task;
+package task;
 
 public class Task {
     protected String name;
