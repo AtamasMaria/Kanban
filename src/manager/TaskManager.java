@@ -14,8 +14,6 @@ public interface TaskManager {
 
     int createSubtask(Subtask subtask);
 
-    int generateId();
-
     Task getTaskById(int id);
 
     Epic getEpicByID(int id);
