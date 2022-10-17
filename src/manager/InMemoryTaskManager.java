@@ -16,6 +16,10 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = historyManager;
     }
 
+    private int generateId() {
+        return id++;
+    }
+
     @Override
     public int createTask(Task task) {
         int id = generateId();
@@ -47,10 +51,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public int generateId() {
-        return id++;
-    }
 
     @Override
     public Task getTaskById(int id) {
