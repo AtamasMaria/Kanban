@@ -55,4 +55,6 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    void remove(int id);
+
 }

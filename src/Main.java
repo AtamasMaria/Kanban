@@ -5,6 +5,8 @@ import task.Status;
 import task.Subtask;
 import task.Task;
 
+import java.util.List;
+
 public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
@@ -29,38 +31,17 @@ public class Main {
         taskManager.getEpicByID(4);
         taskManager.getSubtaskById(5);
         taskManager.getSubtaskById(6);
-        System.out.println(taskManager.getHistory());
         taskManager.getSubtaskById(6);
         taskManager.getEpicByID(3);
-        System.out.println(taskManager.getHistory());
 
-
-
-   /*     List<Task> tasks = taskManager.getAllTasks();
-        System.out.println(tasks);
-        List<Epic> epics = taskManager.getAllEpics();
-        System.out.println(epics);
-        List<Subtask> subtasks = taskManager.getAllSubtasks();
-        System.out.println(subtasks);
-
-        Subtask subtasksByEpic = taskManager.getEpicSubtasksById(3);
-        System.out.println(subtasksByEpic);
-
-        Task task1 = taskManager.getTaskById(1);
-        task1.setStatus(Status.DONE);
-        Task task2 = taskManager.getTaskById(2);
-        task2.setStatus(Status.IN_PROGRESS);
-
-        Subtask subtask = taskManager.getSubtaskById(5);
-        subtask.setStatus(Status.DONE);
-        taskManager.updateSubtask(subtask);
-        Epic epic = taskManager.getEpicByID(3);
-        System.out.println(epic);
-
-        taskManager.deleteTaskById(1);
-        taskManager.printAllTask();
-        taskManager.deleteEpicById(4);
-        taskManager.printAllEpic(); */
-
+        List<Task> history = taskManager.getHistory();
+        System.out.println(history);
+        taskManager.deleteEpicById(3);
+        List<Task> history2 = taskManager.getHistory();
+        System.out.println(history2);
+        taskManager.remove(1);
+        List<Task> history3 = taskManager.getHistory();
+        System.out.println(history3);
     }
 }
+

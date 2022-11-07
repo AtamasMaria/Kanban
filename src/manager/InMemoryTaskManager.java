@@ -3,6 +3,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import task.*;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -114,6 +115,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (taskList.containsKey(id)) {
             taskList.remove(id);
             System.out.println("Task deleted.");
+            historyManager.remove(id);
         } else {
             System.out.println("Task not found.");
         }
@@ -128,8 +130,12 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpicById(int id) {
         if (epicList.containsKey(id)) {
             Epic epic = epicList.get(id);
-            epic.deleteAllSubtask();
             epicList.remove(id);
+            for (Integer subtaskId : epic.getSubtasksIdList()) {
+                historyManager.remove(subtaskId);
+            }
+            epic.deleteAllSubtask();
+            historyManager.remove(id);
             System.out.println("Epic deleted.");
         } else {
             System.out.println("Epic not found.");
@@ -150,6 +156,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.deleteSubtask(id);
             subtaskList.remove(id);
             updateEpicStatus(epic);
+            historyManager.remove(id);
         } else {
             System.out.println("Subtask not found.");
         }
@@ -246,7 +253,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateEpicStatus(Epic epic){
+    public void updateEpicStatus(Epic epic) {
         if (epicList.containsKey(epic.getId())) {
             if (epic.getSubtasksIdList().size() == 0) {
                 epic.setStatus(Status.NEW);
@@ -278,7 +285,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public void remove(int id) {
+        historyManager.remove(id);
     }
 }
