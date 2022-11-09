@@ -16,10 +16,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void linkList(Task task) {
         Node newNode = new Node();
         newNode.setTask(task);
-        if (history.containsKey(task.getId())) {
-            removeNode(history.get(task.getId()));
-
-        }
+        removeNode(task.getId());
         if (head == null) {
             head = newNode;
             tail = newNode;
@@ -34,7 +31,8 @@ public class InMemoryHistoryManager implements HistoryManager {
         history.put(newNode.task.getId(), newNode);
     }
 
-    private void removeNode(Node node) { //в качестве аргумента получает узел и вырезает его
+    private void removeNode(int id) { //в качестве аргумента получает узел и вырезает его
+        Node node = history.remove(id);
         if (node != null) {
             history.remove(node.getTask().getId());
             Node prev = node.getPrev();
@@ -75,7 +73,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        removeNode(getNode(id));
+        removeNode(id);
     }
 
     @Override
