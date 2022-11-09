@@ -34,7 +34,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void removeNode(int id) { //в качестве аргумента получает узел и вырезает его
         Node node = history.remove(id);
         if (node != null) {
-            history.remove(node.getTask().getId());
             Node prev = node.getPrev();
             Node next = node.getNext();
             if (head == node) { // prev = null
