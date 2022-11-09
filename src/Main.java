@@ -40,6 +40,7 @@ public class Main {
         List<Task> history2 = taskManager.getHistory();
         System.out.println(history2);
         taskManager.remove(1);
+        taskManager.remove(8);
         List<Task> history3 = taskManager.getHistory();
         System.out.println(history3);
     }
