@@ -1,5 +1,7 @@
 package task;
 
+import taskType.TaskType;
+
 public class Subtask extends Task {
     protected int epicId;
 
@@ -8,6 +10,9 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public TaskType getType(){
+        return TaskType.SUBTASK;
+    }
     public void setStatus(Status status) {
         this.status = status;
     }

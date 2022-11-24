@@ -1,14 +1,25 @@
-import manager.Managers;
+/*import manager.Managers;
 import manager.TaskManager;
 import task.Epic;
 import task.Status;
 import task.Subtask;
 import task.Task;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+
+
+
+
+
+
+
+
+
         TaskManager taskManager = Managers.getInMemoryTaskManager(Managers.getDefaultHistory());
 
         System.out.println("Tests");
@@ -44,5 +55,5 @@ public class Main {
         List<Task> history3 = taskManager.getHistory();
         System.out.println(history3);
     }
-}
+}*/
 

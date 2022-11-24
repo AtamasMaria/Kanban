@@ -1,8 +1,10 @@
 package manager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 
 import task.*;
 
@@ -75,7 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getAllTasks() {
         if (taskList.isEmpty()) {
             System.out.println("Task list is empty.");
-            return null;
+            return Collections.emptyList();
         }
         return new ArrayList<>(taskList.values());
     }
@@ -84,7 +86,7 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Epic> getAllEpics() {
         if (epicList.isEmpty()) {
             System.out.println("Epic list is empty.");
-            return null;
+            return Collections.emptyList();
         }
         return new ArrayList<>(epicList.values());
     }
@@ -93,7 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Subtask> getAllSubtasks() {
         if (subtaskList.isEmpty()) {
             System.out.println("Subtasks list is empty.");
-            return null;
+            return Collections.emptyList();
         }
         return new ArrayList<>(subtaskList.values());
     }
@@ -293,4 +295,5 @@ public class InMemoryTaskManager implements TaskManager {
     public void remove(int id) {
         historyManager.remove(id);
     }
+
 }

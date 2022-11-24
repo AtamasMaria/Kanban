@@ -1,6 +1,7 @@
 package task;
 
 import manager.HistoryManager;
+import taskType.TaskType;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,9 @@ public class Epic extends Task {
     public Epic(String name, String description, Status status) {
         super(name, description, status);
         this.status = Status.NEW;
+    }
+    public TaskType getType(){
+        return TaskType.EPIC;
     }
 
     public void addSubtaskId(int id) {

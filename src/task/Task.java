@@ -1,5 +1,7 @@
 package task;
 
+import taskType.TaskType;
+
 public class Task {
     protected String name;
     protected String description;
@@ -11,6 +13,10 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public TaskType getType(){
+        return TaskType.TASK;
     }
 
     public String getName() {
