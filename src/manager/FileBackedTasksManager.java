@@ -31,25 +31,30 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public static FileBackedTasksManager loadFromFile(File file) {
         HistoryManager historyManager = Managers.getDefaultHistory();
-        FileBackedTasksManager fbtm = new FileBackedTasksManager(historyManager);
+        FileBackedTasksManager fbtm = new FileBackedTasksManager(historyManager, file);
         try {
             String readString = Files.readString(file.toPath());
             String[] split = readString.split("\n ");
             String[] strings = split[0].split("\n");
             for (String string : strings) {
-                Task task = FileDataConverter.fromString(string);
-
-                if (task.getType() == TaskType.EPIC) {
-                    fbtm.createEpic((Epic) task);
-                } else if (task.getType() == TaskType.SUBTASK) {
-                    fbtm.createSubtask((Subtask) task);
+                if (string.isBlank()) {
+                    break;
                 } else {
-                    fbtm.createTask(task);
+                    Task task = FileDataConverter.fromString(string);
+
+                    if (task.getType() == TaskType.EPIC) {
+                        fbtm.createEpic((Epic) task);
+                    } else if (task.getType() == TaskType.SUBTASK) {
+                        fbtm.createSubtask((Subtask) task);
+                    } else {
+                        fbtm.createTask(task);
+                    }
                 }
             }
-            String historyList = Files.readString(file.toPath());
-            for (int id : historyFromString(historyList)) {
-                fbtm.addToHistory(id);
+            if (strings[strings.length - 2].isBlank()) {
+                for (int id : historyFromString(strings[strings.length - 1])) {
+                    fbtm.addToHistory(id);
+                }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Не удалось считать данные из файла. ");
@@ -59,16 +64,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public void save() {
-        try {
-            if (!Files.exists(file.toPath())) {
-                Files.createFile(file.toPath());
-            } else {
-                Files.delete(file.toPath());
-            }
 
-        } catch (IOException e) {
-            throw new ManagerSaveException("Не удалось найти файл для записи.");
-        }
         try {
             FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8);
             for (Task task : getAllTasks()) {
@@ -265,6 +261,7 @@ class Main {
         System.out.println(manager.getAllSubtasks());
 
         System.out.println(manager.getHistory());
+
 
 
     }
