@@ -1,7 +1,7 @@
 package manager;
 
 import java.util.List;
-import task.Task;
+import newTask.Task;
 
 public interface HistoryManager {
 

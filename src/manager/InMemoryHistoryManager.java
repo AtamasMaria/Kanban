@@ -3,7 +3,7 @@ package manager;
 import java.util.ArrayList;
 import java.util.List;
 
-import task.Task;
+import newTask.Task;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -16,7 +16,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     private void linkList(Task task) {
         Node newNode = new Node();
         newNode.setTask(task);
-        removeNode(task.getId());
+        if (history.containsKey(task.getId())) {
+            removeNode(task.getId());
+        }
         if (head == null) {
             head = newNode;
             tail = newNode;
