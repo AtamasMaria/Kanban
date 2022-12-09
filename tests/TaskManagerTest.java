@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 import newTask.*;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -298,4 +299,28 @@ abstract class TaskManagerTest<T extends TaskManager> {
         manager.getEpicById(645);
         assertEquals(1, manager.getHistory().size());
     }
+
+    @Test
+    void shouldUpdateEpicTimeWithNormalSubtaskList() {
+        Epic epic = createEpic();
+        manager.createEpic(epic);
+        Subtask subtask = createSubtask(epic);
+        manager.createSubtask(subtask);
+        subtask.setStartTime(LocalDateTime.now());
+        subtask.setEndTime(subtask.getStartTime().plusMinutes(4));
+        Subtask subtask2 = createSubtask(epic);
+        manager.createSubtask(subtask2);
+        subtask2.setStartTime(LocalDateTime.now().plusMinutes(5));
+        subtask2.setEndTime(subtask2.getStartTime().plusMinutes(10));
+        manager.updateEpic(epic);
+        assertEquals(epic.getStartTime(), subtask.getStartTime());
+        assertEquals(epic.getEndTime(), subtask2.getEndTime());
+    }
+
+    @Test
+    void shouldNotUpdateEpicWithEmptySubtasksList() { // Не уверенна, что выполнила правильно(
+        Epic epic = createEpic();
+        manager.createEpic(epic);
+        assertThrows(NullPointerException.class, () -> {manager.updateEpic(epic);},"The list of subtasks is empty");
+        }
 }

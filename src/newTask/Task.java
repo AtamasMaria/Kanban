@@ -15,10 +15,15 @@ public class Task {
     protected LocalDateTime startTime;
     protected LocalDateTime endTime;
 
+    // Оставила этот конструктор для создания Эпика, потому что его параметры startTime, endTime и duration определяются при создании подзадач,
+    // а при создании эпика эти параметры не задаются.
     public Task(String name, String description, Status status) {
         this.name = name;
         this.description = description;
         this.status = status;
+        this.duration = null;
+        this.startTime = null;
+        this.endTime = null;
     }
 
     public Task(String name, String description, Status status, Duration duration, LocalDateTime startTime) {
@@ -28,13 +33,6 @@ public class Task {
         this.duration = duration;
         this.startTime = startTime;
         this.endTime = startTime.plus(duration);
-    }
-
-    public Task(String name, String description, LocalDateTime startTime) {
-        this.name = name;
-        this.description = description;
-        this.status = Status.NEW;
-        this.startTime = startTime;
     }
 
     public Task(String name, String description, Status status,  Duration duration, LocalDateTime startTime, LocalDateTime endTime) {

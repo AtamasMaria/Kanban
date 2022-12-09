@@ -1,6 +1,7 @@
 package manager;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,21 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Epic> epicList = new HashMap<>();
     private final HashMap<Integer, Subtask> subtaskList = new HashMap<>();
     private final HistoryManager historyManager;
-    protected Set<Task> prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
-        @Override
-        public int compare(Task o1, Task o2) {
-            if (o1.getStartTime() == null) {
-                return 1;
-            } else if (o2.getStartTime() == null) {
-                return -1;
-            } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                return -1;
-            } else if (o1.getStartTime().equals(o2.getStartTime())) {
-                return 1;
-            }
-            return 1;
-        }
-    });
+    protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
@@ -112,8 +99,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(int id) {
         Subtask subtask = subtaskList.get(id);
-        if (subtask != null){
-        historyManager.addTaskToHistory(subtaskList.get(id));
+        if (subtask != null) {
+            historyManager.addTaskToHistory(subtaskList.get(id));
         }
         return subtask;
     }
@@ -156,7 +143,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             return subtasks;
         } else {
-        return Collections.emptyList();
+            return Collections.emptyList();
         }
     }
 
@@ -223,7 +210,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubtasks() {
-        subtaskList.clear();
         for (Epic epic : epicList.values()) {
             for (int subtaskId : epic.getSubtasksIdList()) {
                 Subtask subtask = subtaskList.get(subtaskId);
@@ -231,7 +217,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             epic.deleteAllSubtask();
             updateEpicStatus(epic);
+            updateTimeEpic(epic);
         }
+        subtaskList.clear();
     }
 
     @Override
@@ -271,19 +259,22 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public void updateTimeEpic(Epic epic) {
+    public void updateTimeEpic(Epic epic) throws NullPointerException {
         List<Subtask> subtasks = getEpicSubtasksById(epic.getId());
+        if (subtasks.isEmpty()) {
+            throw new NullPointerException("The list of subtasks is empty");
+        }
         LocalDateTime startTime = subtasks.get(0).getStartTime();
         LocalDateTime endTime = subtasks.get(0).getEndTime();
         for (Subtask subtask : subtasks) {
             if (subtask.getStartTime().isBefore(startTime)) startTime = subtask.getStartTime();
             if (subtask.getEndTime().isAfter(endTime)) endTime = subtask.getEndTime();
         }
-
         epic.setStartTime(startTime);
         epic.setEndTime(endTime);
         int duration = (endTime.getMinute() - startTime.getMinute());
-        epic.setDuration(Duration.ofMillis(duration));
+        epic.setDuration(Duration.ofMinutes(duration));
+
     }
 
     @Override
