@@ -259,10 +259,12 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public void updateTimeEpic(Epic epic) throws NullPointerException {
+    public void updateTimeEpic(Epic epic)  {
         List<Subtask> subtasks = getEpicSubtasksById(epic.getId());
         if (subtasks.isEmpty()) {
-            throw new NullPointerException("The list of subtasks is empty");
+            LocalDateTime startTime = null;
+            LocalDateTime endTime = null;
+            Duration duration = null;
         }
         LocalDateTime startTime = subtasks.get(0).getStartTime();
         LocalDateTime endTime = subtasks.get(0).getEndTime();
