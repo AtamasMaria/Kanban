@@ -26,11 +26,13 @@ public class HttpTaskServer {
                 .create();
         httpServer = HttpServer.create();
         httpServer.bind(new InetSocketAddress(port), 0);
-        httpServer.createContext("/tasks", new TasksHandler());
-        httpServer.createContext("/tasks/task", new TaskHandler());
-        httpServer.createContext("/tasks/epic", new EpicHandler());
-        httpServer.createContext("/tasks/subtask", new SubTaskHandler());
-        httpServer.createContext("/tasks/history", new HistoryHandler());
+        httpServer.createContext("/tasks/", new TasksHandler());
+        httpServer.createContext("/tasks/task/", new TaskHandler());
+        httpServer.createContext("/tasks/epic/", new EpicHandler());
+        httpServer.createContext("/tasks/subtask/", new SubtaskHandler());
+        httpServer.createContext("/tasks/history/", new HistoryHandler());
+    }
+    public void start() {
         httpServer.start();
     }
 
@@ -217,7 +219,7 @@ public class HttpTaskServer {
         }
     }
 
-    class SubTaskHandler implements HttpHandler {
+    class SubtaskHandler implements HttpHandler {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {

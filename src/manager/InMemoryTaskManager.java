@@ -433,4 +433,14 @@ public class InMemoryTaskManager implements TaskManager {
             return true;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "tasks=" + taskList +
+                ", subtasks=" + subtaskList +
+                ", epics=" + epicList +
+                ", historyManager=" + historyManager.getHistory() +
+                '}';
+    }
 }

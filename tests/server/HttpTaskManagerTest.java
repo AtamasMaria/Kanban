@@ -68,7 +68,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
     }
 
     @Test
-    public void checkTasksEndpoint() {
+    public void checkTasksEndpoint() { // Получить задачи по приоритету
         try {
             URI uri1 = URI.create("http://localhost:8080/tasks/");
             HttpRequest request1 = HttpRequest.newBuilder().uri(uri1).GET().build();
@@ -89,7 +89,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
     }
 
     @Test
-    public void checkEndpointAddTask() throws IOException, InterruptedException {
+    public void checkEndpointAddTask() throws IOException, InterruptedException { //Добавление задачи
         String json = gson.toJson(task1);
         URI uri1 = URI.create("http://localhost:8080/tasks/task/");
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
@@ -108,7 +108,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
     }
 
     @Test
-    public void checkEndpointUpdateTask() throws IOException, InterruptedException {
+    public void checkEndpointUpdateTask() throws IOException, InterruptedException { //Обновление задачи
         String json = gson.toJson(task1);
         URI uri = URI.create("http://localhost:8080/tasks/task/");
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
@@ -135,7 +135,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
     }
 
     @Test
-    public void checkEndpointGetTask() throws IOException, InterruptedException {
+    public void checkEndpointGetTask() throws IOException, InterruptedException { //Получение задачи
         String json = gson.toJson(task1);
 
         URI uri = URI.create("http://localhost:8080/tasks/task/");
@@ -155,7 +155,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
         HttpRequest request2 = HttpRequest.newBuilder().uri(uri1).GET().build();
         HttpResponse<String> response2 = client.send(request2, HttpResponse.BodyHandlers.ofString());
         assertEquals(404, response.statusCode());
-       assertTrue(response.body().isEmpty());
+        assertTrue(response.body().isEmpty());
     }
 
     @Test
@@ -170,7 +170,7 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
     }
 
     @Test
-    public void checkEndpointDeleteTask() throws IOException, InterruptedException {
+    public void checkEndpointDeleteTask() throws IOException, InterruptedException { //Удаление задачи
         String json = gson.toJson(task1);
         URI uri = URI.create("http://localhost:8080/tasks/task/");
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
@@ -194,10 +194,224 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
         assertTrue(response.body().isEmpty());
     }
 
-    
+    @Test
+    public void checkEndpointAddEpic() throws IOException, InterruptedException { //Добавление эпика
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
 
+        json = "";
+        HttpRequest.BodyPublisher body1 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request1 = HttpRequest.newBuilder().uri(uri).POST(body1).build();
+        HttpResponse<String> response1 = client.send(request1, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response1.statusCode());
+        assertTrue(response1.body().isEmpty());
+    }
 
+    @Test
+    public void checkEndpointUpdateEpic() throws IOException, InterruptedException { //Обновление эпика
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
 
+        json = gson.toJson(epic);
+        HttpRequest.BodyPublisher body1 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request1 = HttpRequest.newBuilder().uri(uri).POST(body1).build();
+        HttpResponse<String> response1 = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response1.statusCode());
+        assertFalse(response1.body().isEmpty());
+
+        epic1.setId(84);
+        json = gson.toJson(epic1);
+        HttpRequest.BodyPublisher body2 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri).POST(body2).build();
+        HttpResponse<String> response2 = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response2.statusCode());
+        assertTrue(response2.body().isEmpty());
+    }
+
+    @Test
+    public void checkEndpointGetEpic() throws IOException, InterruptedException { // Получение эпика
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
+
+        String url = "http://localhost:8080/tasks/epic/?id=" + epic.getId();
+        URI uri1 = URI.create(url);
+        HttpRequest request1 = HttpRequest.newBuilder().uri(uri1).GET().build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        url = "http://localhost:8080/tasks/epic/?id=843";
+        URI uri2 = URI.create(url);
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri2).GET().build();
+        response = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+
+    @Test
+    public void checkEndpointPutEpic() throws IOException, InterruptedException {
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString("json");
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).PUT(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+
+    @Test
+    public void checkEndpointDeleteEpic() throws IOException, InterruptedException { //Удаление Эпика
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
+
+        String url = "http://localhost:8080/tasks/epic/?id=" + epic.getId();
+        URI uri1 = URI.create(url);
+        HttpRequest request1 = HttpRequest.newBuilder().uri(uri1).DELETE().build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        URI uri2 = URI.create("http://localhost:8080/tasks/epic/?id=651");
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri2).DELETE().build();
+        response = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+
+    @Test
+    public void checkEndpointAddSubtask() throws IOException, InterruptedException { //Добавление подзадач
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
+
+        subtask1.setId(subtask1.getId());
+        subtask1.setEpicId(epic.getId());
+        json = gson.toJson(subtask1);
+        URI uri1 = URI.create("http://localhost:8080/tasks/subtask/");
+        HttpRequest.BodyPublisher body1 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request1 = HttpRequest.newBuilder().uri(uri1).POST(body1).build();
+        response = client.send(request1, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        json = "";
+        HttpRequest.BodyPublisher body2 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri).POST(body2).build();
+        response = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+
+    @Test
+    public void checkEndpointUpdateSubTask() throws IOException, InterruptedException { //Обновление подзадач
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
+
+        subtask1.setId(subtask1.getId());
+        subtask1.setEpicId(epic.getId());
+        json = gson.toJson(subtask1);
+        URI uri1 = URI.create("http://localhost:8080/tasks/subtask/");
+        HttpRequest.BodyPublisher body1 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request1= HttpRequest.newBuilder().uri(uri1).POST(body1).build();
+        response = client.send(request1, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Subtask subtask = gson.fromJson(response.body(), Subtask.class);
+
+        subtask1.setId(subtask.getId());
+        json = gson.toJson(subtask1);
+        HttpRequest.BodyPublisher body2 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri).POST(body2).build();
+        response = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        subtask1.setId(551);
+        json = gson.toJson(subtask1);
+        HttpRequest.BodyPublisher body3 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request3 = HttpRequest.newBuilder().uri(uri).POST(body3).build();
+        response = client.send(request3, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+    @Test
+    public void checkEndpointDeleteSubTask() throws IOException, InterruptedException {
+        String json = gson.toJson(epic1);
+        URI uri = URI.create("http://localhost:8080/tasks/epic/");
+        HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).POST(body).build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Epic epic = gson.fromJson(response.body(), Epic.class);
+
+        subtask1.setId(subtask1.getId());
+        subtask1.setEpicId(epic.getId());
+        json = gson.toJson(subtask1);
+        URI uri1 = URI.create("http://localhost:8080/tasks/subtask/");
+        HttpRequest.BodyPublisher body1 = HttpRequest.BodyPublishers.ofString(json);
+        HttpRequest request1= HttpRequest.newBuilder().uri(uri1).POST(body1).build();
+        response = client.send(request1, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+        Subtask subtask = gson.fromJson(response.body(), Subtask.class);
+
+        String url = "http://localhost:8080/tasks/subtask/?id=" + subtask.getId();
+        URI uri2 = URI.create(url);
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri2).DELETE().build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        URI uri3 = URI.create("http://localhost:8080/tasks/subtask/?id=56");
+        HttpRequest request3 = HttpRequest.newBuilder().uri(uri3).DELETE().build();
+        response = client.send(request3, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
+
+    @Test
+    public void checkHistoryEndpoint() throws IOException, InterruptedException {
+        URI uri = URI.create("http://localhost:8080/tasks/history");
+        HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode());
+        assertFalse(response.body().isEmpty());
+
+        HttpRequest request2 = HttpRequest.newBuilder().uri(uri).DELETE().build();
+        response = client.send(request2, HttpResponse.BodyHandlers.ofString());
+        assertEquals(405, response.statusCode());
+        assertTrue(response.body().isEmpty());
+    }
 }
 
 
