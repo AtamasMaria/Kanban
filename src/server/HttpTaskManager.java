@@ -5,6 +5,7 @@ import exception.ManagerSaveException;
 import manager.FileBackedTasksManager;
 import com.google.gson.*;
 import manager.HistoryManager;
+import manager.TaskManager;
 import newTask.*;
 import server.adapters.InstantAdapter;
 import server.adapters.LocalDateTimeAdapter;
@@ -22,7 +23,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
     private final KVTaskClient client;
     private final Gson gson;
 
-    public HttpTaskManager(String url) {
+    public HttpTaskManager(HistoryManager historyManager, String url) throws IOException, InterruptedException {
+        super(historyManager);
         client = new KVTaskClient(url);
         gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())

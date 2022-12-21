@@ -14,7 +14,7 @@ public class Managers {
         return new InMemoryHistoryManager();
     }
 
-    public static HttpTaskManager getDefault() {
-        return new HttpTaskManager("http://localhost:8078");
+    public static HttpTaskManager getDefault(HistoryManager historyManager) throws IOException, InterruptedException {
+        return new HttpTaskManager(historyManager,"http://localhost:8080");
     }
 }
