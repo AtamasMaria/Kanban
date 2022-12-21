@@ -4,6 +4,7 @@ import newTask.Epic;
 import newTask.Subtask;
 import newTask.Task;
 
+import java.nio.Buffer;
 import java.util.List;
 
 public interface TaskManager {
@@ -57,4 +58,5 @@ public interface TaskManager {
 
     void remove(int id);
 
+    List<Task> getPrioritizedTasks();
 }

@@ -1,3 +1,5 @@
+package manager;
+
 import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 import newTask.*;
@@ -10,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest<T extends TaskManager> {
+public abstract class TaskManagerTest<T extends TaskManager> {
     protected T manager;
 
     protected Task createTask() {

@@ -15,10 +15,10 @@ import org.junit.jupiter.params.shadow.com.univocity.parsers.tsv.TsvFormat;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int id = 1;
-    private final HashMap<Integer, Task> taskList = new HashMap<>();
-    private final HashMap<Integer, Epic> epicList = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtaskList = new HashMap<>();
-    private final HistoryManager historyManager;
+    protected final HashMap<Integer, Task> taskList = new HashMap<>();
+    protected final HashMap<Integer, Epic> epicList = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtaskList = new HashMap<>();
+    protected final HistoryManager historyManager;
     protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public InMemoryTaskManager(HistoryManager historyManager) {

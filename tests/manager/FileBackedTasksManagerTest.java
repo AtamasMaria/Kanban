@@ -1,5 +1,5 @@
-import manager.FileBackedTasksManager;
-import manager.Managers;
+package manager;
+
 import org.junit.jupiter.api.*;
 import newTask.*;
 import java.io.File;
