@@ -54,9 +54,6 @@ public class Main {
             System.out.println("Загруженный менеджер: ");
             System.out.println(httpTaskManager);
             server.stop();
-
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
