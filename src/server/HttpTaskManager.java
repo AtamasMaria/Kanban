@@ -72,18 +72,12 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     @Override
     public void save() {
-         List<Task> tasks = new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
         List<Epic> epics = new ArrayList<>();
         List<Subtask> subtasks = new ArrayList<>();
-         for (Task task : getAllTasks()) {
-            tasks.add(task);
-         }
-        for (Epic epic : getAllEpics()) {
-            epics.add(epic);
-        }
-        for (Subtask subtask : subtasks) {
-            subtasks.add(subtask);
-        }
+        tasks.addAll(getAllTasks());
+        epics.addAll(getAllEpics());
+        subtasks.addAll(getAllSubtasks());
         client.put("tasks", gson.toJson(tasks.toString()));
         client.put("epics", gson.toJson(epics.toString()));
         client.put("subtasks", gson.toJson(subtasks.toString()));
