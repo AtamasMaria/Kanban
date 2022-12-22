@@ -26,8 +26,13 @@ public class KVTaskClient {
                 .build();
 
         client = HttpClient.newHttpClient();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        apiToken = response.body();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            apiToken = response.body();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("Во время запроса произошла ошибка");
+        }
     }
 
     public void put(String key, String json) {
