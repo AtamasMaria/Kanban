@@ -286,7 +286,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             for (Task task : taskList.values()) {
                 System.out.println("Task{ +" +
-                        "description='" + task.getDescription() + +'\'' +
+                        "description='" + task.getDescription() + '\'' +
                         ", id=" + task.getId() +
                         ", name='" + task.getName() + '\'' +
                         ", status=" + task.getStatus() +

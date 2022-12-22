@@ -17,13 +17,12 @@ import java.time.LocalDateTime;
 public class HttpTaskServer {
     private HttpServer httpServer;
     private final TaskManager taskManager;
-    private final Gson gson;
+    private final Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .create();
 
     public HttpTaskServer(TaskManager taskManager, int port) throws IOException {
         this.taskManager = taskManager;
-        gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .create();
         httpServer = HttpServer.create();
         httpServer.bind(new InetSocketAddress(port), 0);
         httpServer.createContext("/tasks/", new TasksHandler());

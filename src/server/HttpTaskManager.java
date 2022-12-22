@@ -11,6 +11,8 @@ import server.adapters.LocalDateTimeAdapter;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpTaskManager extends FileBackedTasksManager {
@@ -70,12 +72,26 @@ public class HttpTaskManager extends FileBackedTasksManager {
 
     @Override
     public void save() {
-        client.put("tasks", gson.toJson(taskList.values()));
-        client.put("epics", gson.toJson(epicList.values()));
-        client.put("subtasks", gson.toJson(subtaskList.values()));
+         List<Task> tasks = new ArrayList<>();
+        List<Epic> epics = new ArrayList<>();
+        List<Subtask> subtasks = new ArrayList<>();
+         for (Task task : getAllTasks()) {
+            tasks.add(task);
+         }
+        for (Epic epic : getAllEpics()) {
+            epics.add(epic);
+        }
+        for (Subtask subtask : subtasks) {
+            subtasks.add(subtask);
+        }
+        client.put("tasks", gson.toJson(tasks.toString()));
+        client.put("epics", gson.toJson(epics.toString()));
+        client.put("subtasks", gson.toJson(subtasks.toString()));
         client.put("history", gson.toJson(this.getHistory()
                 .stream()
                 .map(Task::getId)
                 .collect(Collectors.toList())));
     }
+
 }
+

@@ -26,17 +26,8 @@ public class KVTaskClient {
                 .build();
 
         client = HttpClient.newHttpClient();
-        try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                apiToken = response.body();
-            } else {
-                System.out.println("Что-то пошло не так. Код ошибки: " + response.statusCode());
-            }
-        } catch (IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
-        }
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        apiToken = response.body();
     }
 
     public void put(String key, String json) {
@@ -48,6 +39,7 @@ public class KVTaskClient {
                 .header("Content-Type", "application/json")
                 .build();
 
+        HttpClient client = HttpClient.newHttpClient();
         try {
             HttpResponse<String> response = client.send(request,
                     HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
@@ -60,7 +52,6 @@ public class KVTaskClient {
     }
 
     public String load(String key) {
-        String jsonResponse = null;
         URI uri = URI.create(this.serverURL + "/load/" + key + "?API_TOKEN=" + apiToken);
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -69,23 +60,16 @@ public class KVTaskClient {
                 .header("Content-Type", "application/json")
                 .build();
 
+        HttpClient client = HttpClient.newHttpClient();
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-            if (response.statusCode() == 200) {
-                JsonElement jsonElement = JsonParser.parseString(response.body());
-                if (!jsonElement.isJsonArray()) {
-                    System.out.println("Ответ от сервера не соответствует ожидаемому.");
-                } else {
-                    jsonResponse = jsonElement.getAsJsonArray().toString();
-                }
-            } else {
-                System.out.println("Что-то пошло не так. Код ошибки: " + response.statusCode());
-            }
+            HttpResponse<String> response = client.send(request,
+                    HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8)
+            );
+            return response.body();
         } catch (IOException | InterruptedException e) {
-            System.out.println("Во время выполнения запроса возникла ошибка.\n" +
-                    "Проверьте, пожалуйста, адрес и повторите попытку.");
+            e.printStackTrace();
+            return "Во время запроса произошла ошибка";
         }
-        return jsonResponse;
     }
 }
 
