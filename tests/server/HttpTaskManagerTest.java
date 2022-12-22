@@ -60,12 +60,18 @@ class HttpTaskManagerTest<T extends TaskManagerTest<HttpTaskManager>> {
         TaskManager taskManager = Managers.getDefault(historyManager);
         taskServer = new HttpTaskServer(taskManager, 8078 );
 
-        task1 = createTask();
-        epic1 = createEpic();
-        subtask1 = createSubtask(epic1);
-        subtask2 = createSubtask(epic1);
 
+        task1 = createTask();
+        taskManager.createTask(task1);
+        epic1 = createEpic();
+        taskManager.createEpic(epic1);
+        subtask1 = createSubtask(epic1);
+        taskManager.createSubtask(subtask1);
+        subtask2 = createSubtask(epic1);
+        taskManager.createSubtask(subtask2);
     }
+
+
 
     @Test
     public void checkTasksEndpoint() { // Получить задачи по приоритету

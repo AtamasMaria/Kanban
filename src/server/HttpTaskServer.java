@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class HttpTaskServer {
     private HttpServer httpServer;
     private final TaskManager taskManager;
+
     private final Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
@@ -30,6 +31,7 @@ public class HttpTaskServer {
         httpServer.createContext("/tasks/epic/", new EpicHandler());
         httpServer.createContext("/tasks/subtask/", new SubtaskHandler());
         httpServer.createContext("/tasks/history/", new HistoryHandler());
+        start();
     }
     public void start() {
         httpServer.start();
