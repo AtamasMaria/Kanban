@@ -32,7 +32,7 @@ public class KVServer {
             System.out.println("\n/load");
             if (!hasAuth(h)) {
                 System.out.println("Запрос не авторизован, нужен параметр в query API_KEY со значением апи-ключа");
-                h.sendResponseHeaders(403, 0);
+                h.sendResponseHeaders(401, 0);
                 return;
             }
             if ("GET".equals(h.getRequestMethod())) {
